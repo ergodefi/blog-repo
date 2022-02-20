@@ -1,0 +1,9 @@
+baseURL: https://yugomike.github.io/
+languageCode: en-us
+title: Michael Y. Han
+theme: PaperMod
+
+params:
+  homeInfoParams:
+    Title: Michael Y. Han
+    Content: This is a blog documenting my journey of learning about every facet of defi. I will post 1-2 times per week. Stay tuned! 
