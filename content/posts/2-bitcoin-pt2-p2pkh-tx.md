@@ -1,5 +1,5 @@
 ---
-title: "Bitcoin Transactions - Part 2: generating a P2PKH transaction"
+title: "Bitcoin Transactions - Part 2: Generating a P2PKH Transaction"
 date: 2022-02-19T20:56:53-08:00
 ---
 
@@ -61,19 +61,21 @@ public_key_hash2 = PublicKey.from_point(public_key2).encode(compressed=True, has
 bitcoin_address2 = PublicKey.from_point(public_key2).address(net='test', compressed=True)
 
 print("Bitcoin Identity #2")
-print("* Secret (Private) Key: ", secret_key2)
-print("* Public key (uncompressed): ", (public_key2.x, public_key2.y))
-print("* public key (compressed): ", public_key2_compressed) 
-print("* Public key hash: ", public_key_hash2) 
-print("* Bitcoin address: ", bitcoin_address2)
+print("* Secret (Private) Key:", secret_key2)
+print("* Public key (uncompressed):", (public_key2.x, public_key2.y))
+print("* public key (compressed):", public_key2_compressed) 
+print("* Public key hash:", public_key_hash2) 
+print("* Bitcoin address:", bitcoin_address2)
 ```
 
-    Bitcoin Identity #2
-    * Secret (Private) Key:  40080948312511263619633009066092429669818823132623907411220264815
-    * Public key (uncompressed):  (110398465478409316276920527699961004613373518058286253761163568467326599764908, 27581862894942929806511524173629706827067517406769995130296969522417828343338)
-    * public key (compressed):  02f413512fca28fd30175ac631e3d5836dc0caac14d28236bacad57a9db7b11bac
-    * Public key hash:  00f6739d5e8b4017a9eebe413249ed3949e65e24
-    * Bitcoin address:  mfc3Xp6SfPZq2AfgXcVWRoZzWrqjZQtCrp
+```output
+Bitcoin Identity #2
+* Secret (Private) Key: 40080948312511263619633009066092429669818823132623907411220264815
+* Public key (uncompressed): (110398465478409316276920527699961004613373518058286253761163568467326599764908, 27581862894942929806511524173629706827067517406769995130296969522417828343338)
+* public key (compressed): 02f413512fca28fd30175ac631e3d5836dc0caac14d28236bacad57a9db7b11bac
+* Public key hash: 00f6739d5e8b4017a9eebe413249ed3949e65e24
+* Bitcoin address: mfc3Xp6SfPZq2AfgXcVWRoZzWrqjZQtCrp
+```
 
 #### Generating the  inputs and output (TxIn and TxOut) objects
 Second, we need to generate the inputs and outputs (known as TxIn and TxOut respectively). We also need a Script object to store the locking and unlocking scripts, which are used in the locking and unlocking of the UTXO. Finally, we will construct the transaction (Tx) itself. Again, I have written the functionality in *helper.py*, so we can simply focus on understanding the process. 
@@ -191,6 +193,6 @@ message = tx.encode(sig_index = 0)
 print("Message for signing: ", message.hex())
 ```
 
-    Message for signing:  0100000001249cff3cb28316398c5f02e34331add96a5e877fcf9f967c0657526d5caf0767010000001976a914363bb1ef1d8791bdbd7e7492ef91decc1eb7295d88acffffffff02f8240100000000001976a91400f6739d5e8b4017a9eebe413249ed3949e65e2488acf0550000000000001976a914363bb1ef1d8791bdbd7e7492ef91decc1eb7295d88ac0000000001000000
+`Message for signing:  0100000001249cff3cb28316398c5f02e34331add96a5e877fcf9f967c0657526d5caf0767010000001976a914363bb1ef1d8791bdbd7e7492ef91decc1eb7295d88acffffffff02f8240100000000001976a91400f6739d5e8b4017a9eebe413249ed3949e65e2488acf0550000000000001976a914363bb1ef1d8791bdbd7e7492ef91decc1eb7295d88ac0000000001000000`
 
 That's it for Part 2. I was hoping to cover up to the generation of the digital signature, but it is getting too long. So instead, we will pick up from where we left off and generate the digital signature in the next part. We will then finally create the final transaction and propagate it to the Bitcoin network (Testnet). Stay tuned! 

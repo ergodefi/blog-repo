@@ -1,5 +1,5 @@
 ---
-title: "Bitcoin Transactions - Part 1: keys and addresses"
+title: "Bitcoin Transactions - Part 1: Keys and Addresses"
 date: 2022-02-12T17:51:29-08:00
 ---
 
@@ -109,17 +109,14 @@ Once we have generated the private key, we simply perform elliptical curve multi
 
 ```python
 public_key = secret_key * G
-public_key
-
-```
-```outut
-Point(curve=Curve(p=115792089237316195423570985008687907853269984665640564039457584007908834671663, a=0, b=7), x=35490547311314112975969199385462927466356376524965552000974623035901126229990, y=75829577894590863462191837680945451999817850420713104019785938471674831323880)
+print(public_key)
 ```
 
-You may be surprised to know that the public key is actually not a single value, but rather (x, y) coordinates. Intuitively this makes sense, since you are multiplying a randomly generated number by G, which is itself a coordinate on the secp256k1 curve. 
+`Point(curve=Curve(p=115792089237316195423570985008687907853269984665640564039457584007908834671663, a=0, b=7), x=35490547311314112975969199385462927466356376524965552000974623035901126229990, y=75829577894590863462191837680945451999817850420713104019785938471674831323880)`
 
-At this point, the "public_key" variable is a Point object. But as we'll see shortly, the Public Key takes on many forms and serves many purposes in a bitcoin transaction, so it's kind of a big deal and deserves its own object. 
+You may be surprised to know that the public key is actually not a single value, but rather a set of (x, y) coordinates. Intuitively this makes sense, since you are multiplying a randomly generated number by G, which is itself a coordinate on the secp256k1 curve. 
 
+As we'll see shortly, the public key can take on many forms and has many variations. It's kind of a big deal and deserves its own class, which I have created in *helper.py*. We just need to import it. 
 
 ```python
 from helper import PublicKey
@@ -131,11 +128,9 @@ Now, let's see the various forms of the public key.
 
 2) **Public Key (Compresse)** - it turns out that you can calculate y given x, so there is no point in storing the y value for a transaction. Since most transactions include the public key as part of its verification process, halving the size of the public key is a significant space reduction, from 512 to 256 bits 
 
-3) **Public Key Hash** - hashing the public key (compressed or uncompressed) using a combination of two hashing functions, SHA256 and RIPEMD160, will create the public key hash. In a P2PKH transaction, this is what you give out to the sender. It introduces another layer of security by introducing another trapdoor function and also further reduce the size of the transaction to 160 bits. 
+3) **Public Key Hash** - hashing the public key using a combination of two hashing functions, SHA256 and RIPEMD160, will create the public key hash. In a P2PKH transaction, it is used to provide an extra layer of security. 
 
 4) **Bitcoin Address (Base58Check)** - the final form of the public key is the Bitcoin Address. It is actually just another way to encode the public key hash to make it more human readable by using the Base58Check encoding. In this format, both uppercase and lowercase letters are used alongside numbers, but certain values are removed (i.e. zero and uppercase i) to reduce transcription errors. You won't see the base58check encoded address format on the Bitcoin Protocol. Its purpose is purely for human readability. 
-
-
 
 ```python
 public_key_compressed = PublicKey.from_point(public_key).encode(compressed=True, hash160=False).hex()
